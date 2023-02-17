@@ -1,0 +1,81 @@
+create or replace table cows_one 
+(Cnumber_1 INT,Cbreed varchar (10));
+insert into cows_one values 
+(1,'Holstein'),
+(2,'Gurensey'),
+(3,'Angus'),
+(4,'Mou'),
+(5,'Honey');
+
+create or replace table cows_two 
+(Cnumber_2 INT,breeds varchar (12));
+drop table cows_two ;
+insert into cows_two values
+(2,'Joursey'),
+(3,'Brown Swiss'),
+(4,'Ayrshire');
+
+Select CO.Cnumber_1,CO.Cbreed,CT.breeds
+from  cows_one as CO 
+inner join cows_two as CT on CO.Cnumber_1=CT.Cnumber_2;
+
+CREATE OR REPLACE TABLE AR_OWNER
+(
+   OwnerID INTEGER NOT NULL PRIMARY KEY ,
+   Name VARCHAR2(20),
+   Surname STRING,
+   StreetAddress VARCHAR2(50),
+   City STRING,
+   State CHAR(4),
+   StateFull STRING,
+   ZipCode INTEGER
+);
+
+
+CREATE OR REPLACE TABLE AR_PETS
+(
+    PetID VARCHAR(10) NOT NULL PRIMARY KEY,
+    Name VARCHAR(20),
+    Kind STRING,
+    Gender CHAR(7),
+    Age INTEGER,
+    OwnerID INTEGER NOT NULL REFERENCES AR_OWNER 
+);
+
+Problem --create a table in which owners having pets--
+
+Select *
+from AR_Owner as ARO inner join AR_PETS as ARP on ARO.OwnerID=ARP.OwnerID;
+
+Select ARO.OwnerID,PetID,ARO.Name,Gender,Age
+from AR_Owner as ARO inner join AR_PETS as ARP on ARO.OwnerID=ARP.OwnerID;
+create or replace table AR_owner_pets as
+Select ARO.OwnerID,PetID,ARO.Name,Gender,Age
+from AR_Owner as ARO inner join AR_PETS as ARP on ARO.OwnerID=ARP.OwnerID;
+Select*from AR_owner_pets;
+
+create or replace table GGN_June_Stock
+(Item_Name Varchar (50),
+ Item_Code Varchar (8) Primary Key,
+ OK_Qty Number(3,0),
+ Damage_Qty Number (3,0)
+);
+select Item_Name,Item_Code,OK_Qty, 'Jun' as month from  GGN_June_Stock
+UNION
+select Item_Name,Item_Code,OK_Qty, 'May' as month from  GGN_May_Stock;
+
+
+create or replace table GGN_May_Stock
+(Item_Name Varchar (50),
+ Item_Code Varchar (8) Primary Key,
+ OK_Qty Number(3,0),
+ Damage_Qty Number (3,0)
+);
+
+select* 
+from GGN_June_Stock as JS
+inner join GGN_May_Stock as MS on JS.Item_Code=MS.Item_Code;
+
+select MS.Item_Code,JS.Item_Name ,JS.OK_Qty as Jun_ok,MS.OK_Qty as May_ok, JS.Damage_Qty as Jun_damage, MS.Damage_Qty as May_damage
+from GGN_June_Stock as JS
+inner join GGN_May_Stock as MS on JS.Item_Code=MS.Item_Code;
